@@ -4,6 +4,6 @@ import retrofit2.http.GET
 
 interface Api {
 
-    @GET("hello/love")
+    @GET("hello")
     suspend fun getMess(): Item
 }
