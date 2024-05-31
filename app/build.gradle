@@ -1,0 +1,115 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
+
+android {
+    compileSdk versions.compileSdkVersion
+    buildToolsVersion versions.buildToolsVersion
+
+    bundle {
+        language {
+            // Specifies that the app bundle should not support
+            // configuration APKs for language resources. These
+            // resources are instead packaged with each base and
+            // dynamic feature APK.
+            enableSplit = false
+        }
+    }
+
+    defaultConfig {
+        applicationId "com.photomyne.myapplication"
+        minSdkVersion versions.minSdkVersion
+        targetSdkVersion versions.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        flavorDimensions "default"
+        multiDexEnabled true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+        renderscriptTargetApi 33
+        renderscriptSupportModeEnabled true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    productFlavors {
+        product {
+            dimension "default"
+        }
+        dev {
+            dimension "default"
+            applicationId = 'com.photomyne.myapplication'
+        }
+    }
+    buildFeatures {
+        dataBinding true
+    }
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xmaxerrs" << "500" // or whatever number you want
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+
+/*Core*/
+    implementation libraries.androidAppCopmpat
+    implementation libraries.multidex
+    implementation libraries.ktxCore
+
+    /*UI*/
+    implementation libraries.androidxNavigation
+    implementation libraries.androidUICommon
+    implementation libraries.materialDesign
+    implementation libraries.hilt
+    kapt libraries.hiltKpt
+    annotationProcessor libraries.hiltAP
+
+    implementation libraries.glide
+    annotationProcessor libraries.glideAP
+
+    /*Database ( if use Room) */
+    implementation libraries.room
+    implementation libraries.roomRxjava
+    annotationProcessor libraries.roomKpt
+    kapt libraries.roomAP
+    /*Other*/
+    implementation libraries.timberLog
+    implementation libraries.sdp
+    implementation libraries.ssp
+    implementation libraries.retrofitWithLogger
+    implementation libraries.lottie
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+    implementation libraries.rxJava
+    implementation 'com.kyleduo.switchbutton:library:2.1.0'
+
+    /*Test*/
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation testLib
+
+    //retrofit
+    implementation libraries.retrofitWithLogger
+    implementation libraries.retrofitRXjavaAdapter
+
+
+}
